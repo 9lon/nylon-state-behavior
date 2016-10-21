@@ -1,0 +1,17 @@
+{
+  "name": "nylon-state-behavior",
+  "homepage": "https://github.com/9lon/nylon-state-behavior",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "polymer/polymer#^1.7.0"
+  }
+}
