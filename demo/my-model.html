@@ -6,7 +6,15 @@
     </template>
     <script>
         Polymer({
-            is:'my-model'
+            is:'my-model',
+            behaviors:[nylon.behavior.state.register],
+            created:function(){
+                this.nylonStateRegister(this.is);
+            },
+            testFunction:function(msg){
+                this.name = msg;
+                this.nylonStateNotify('name');
+            }
         });
     </script>
 </dom-module>

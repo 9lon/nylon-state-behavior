@@ -4,8 +4,70 @@
     if(typeof window.nylon == "undefined") window.nylon = {};
     if(typeof nylon.behavior == "undefined") nylon.behavior = {};
     if(typeof nylon.behavior.state == "undefined") nylon.behavior.state = {};
+    if(typeof nylon.behavior.state.model == "undefined") nylon.behavior.state.model = {};
+
+    nylon.behavior.state.register = {
+        nylonStateRegister:function(modelName){
+            var modelName = modelName.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+            
+            if(typeof nylon.behavior.state.model[modelName] == "undefined"){
+                nylon.behavior.state.model[modelName] = {node:this,state:{}};
+                this.modelName = modelName;
+            }else{
+                console.error('nylonState : (nylonStateRegister) Model has already.')
+            }
+        },
+        nylonStateNotify:function(state){
+            if(typeof nylon.behavior.state.model[this.modelName].state[state] != "undefined"){
+                nylon.behavior.state.model[this.modelName].state[state].map(function(map){
+                    map.node[map.prop] = this[state];
+                }.bind(this))
+            }else{
+                console.error('nylonState : (nylonStateNotify) State not found.');
+            }
+        },
+        mapStateToProps:function(stateName,map){
+            if(!nylon.behavior.state.model[this.modelName].state.hasOwnProperty(stateName)){
+                nylon.behavior.state.model[this.modelName].state[stateName]=[map];
+            }else{
+                nylon.behavior.state.model[this.modelName].state[stateName].push(map);
+            }
+            console.log(nylon.behavior.state.model);
+        }
+    };
 
     nylon.behavior.state.connect = {
-        
-    }
+        nylonStateDispatch:function(modelName){
+            var modelName = modelName.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+            if(typeof nylon.behavior.state.model[modelName] != "undefined"){
+                return nylon.behavior.state.model[modelName].node;
+            }else{
+                console.error('nylonState : Model not found.');
+            }
+        },
+        created:function(){
+            if(typeof this.properties != "undefined"){
+                for(var key in this.properties){
+                    if(this.properties[key].hasOwnProperty('nylonState')){
+                        var props = this.properties[key].nylonState.split('.');
+                        //console.log(props);
+                        if(props.length=="2"){
+                            var modelName = props[0].replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+                            var map = {prop:key,node:this};
+
+                            if(typeof nylon.behavior.state.model[modelName] != "undefined"){
+                                this.nylonStateDispatch(modelName).mapStateToProps(props[1],map);
+                            }else{
+                                console.error('nylonState : Model not found.')
+                            }
+
+                        }else{
+                            console.warn('nylonState : Wrong patten.');
+                        }
+                    }
+                }
+            }
+
+        }
+    };
 </script>

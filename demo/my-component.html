@@ -2,11 +2,21 @@
 
 <dom-module id="my-component">
     <template>
-        my component
+        my component {{name}} <button on-tap="sendFuntion">send to model</button>
     </template>
     <script>
         Polymer({
-            is:'my-component'
+            is:'my-component',
+            properties:{
+                name:{
+                    type:"String",
+                    nylonState:"my-model.name"
+                }
+            },
+            behaviors:[nylon.behavior.state.connect],
+            sendFuntion:function(){
+                this.nylonStateDispatch('my-model').testFunction('msg');
+            }
         });
     </script>
 </dom-module>
