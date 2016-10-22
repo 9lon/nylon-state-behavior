@@ -1,0 +1,22 @@
+{
+  "name": "nylon-state-behavior",
+  "version": "1.0.0",
+  "description": "",
+  "main": "service-worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/9lon/nylon-state-behavior.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/9lon/nylon-state-behavior/issues"
+  },
+  "homepage": "https://github.com/9lon/nylon-state-behavior#readme",
+  "dependencies": {
+    "redux": "^3.6.0"
+  }
+}

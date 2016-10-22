@@ -1,38 +1,31 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<script src="../node_modules/redux/dist/redux.js"></script>
 
 <dom-module id="my-model">
     <template>
-        <template is="dom-repeat" items="{{todoList}}">
-            {{item}}
-        </template>
-        <br>
-        {{todoList}}
-        <hr>
+        model
     </template>
     <script>
         Polymer({
             is:'my-model',
-            behaviors:[nylon.behavior.state.register],
-            properties:{
-                todoList:{
-                    type:Array,
-                    value:['d']
-                }
-            },
             created:function(){
-                this.nylonStateRegister(this.is);
+
+                const counter = (state = 0, action) => {
+                    switch (action.type) {
+                    case 'INCREMENT':
+                        return this.increment(state)
+                    case 'DECREMENT':
+                        return state - 1
+                    default:
+                        return state
+                    }
+                }
+
+                store = Redux.createStore(counter);
+
             },
-            ready:function(){
-                //this.todoList = ['the frist','the two'];
-                //this.nylonStateNotify('todoList');
-            },
-            testFunction:function(msg){
-                this.name = msg;
-                this.nylonStateNotify('name');
-            },
-            addTodo:function(msg){
-                this.push('todoList',msg);
-                this.nylonStateNotify('todoList');
+            increment:function(state){
+                return state+1
             }
         });
     </script>

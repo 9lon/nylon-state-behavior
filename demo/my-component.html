@@ -2,28 +2,20 @@
 
 <dom-module id="my-component">
     <template>
-        {{name}}{{tryTodo}}<br><button on-tap="sendFuntion">send to model</button><button on-tap="addTodo">add todo</button><hr>
+        components
     </template>
     <script>
         Polymer({
             is:'my-component',
-            properties:{
-                name:{
-                    type:"String",
-                    nylonState:"my-model.name"
-                },
-                tryTodo:{
-                    type:"Array",
-                    nylonState:"my-model.todoList"
-                }
-            },
-            behaviors:[nylon.behavior.state.connect],
-            sendFuntion:function(){
-                this.nylonStateDispatch('my-model').testFunction('msg');
-            },
-            addTodo:function(){
-                this.nylonStateDispatch('my-model').addTodo('next');
+            ready:function(){
+                store.dispatch({ type: 'INCREMENT' });
+                store.subscribe(() =>
+                    console.log(store.getState())
+                )
             }
+            
         });
+
+        
     </script>
 </dom-module>
