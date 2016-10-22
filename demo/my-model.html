@@ -2,18 +2,37 @@
 
 <dom-module id="my-model">
     <template>
-        my model
+        <template is="dom-repeat" items="{{todoList}}">
+            {{item}}
+        </template>
+        <br>
+        {{todoList}}
+        <hr>
     </template>
     <script>
         Polymer({
             is:'my-model',
             behaviors:[nylon.behavior.state.register],
+            properties:{
+                todoList:{
+                    type:Array,
+                    value:['d']
+                }
+            },
             created:function(){
                 this.nylonStateRegister(this.is);
+            },
+            ready:function(){
+                //this.todoList = ['the frist','the two'];
+                //this.nylonStateNotify('todoList');
             },
             testFunction:function(msg){
                 this.name = msg;
                 this.nylonStateNotify('name');
+            },
+            addTodo:function(msg){
+                this.push('todoList',msg);
+                this.nylonStateNotify('todoList');
             }
         });
     </script>

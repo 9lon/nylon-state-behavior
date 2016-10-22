@@ -2,7 +2,7 @@
 
 <dom-module id="my-component">
     <template>
-        my component {{name}} <button on-tap="sendFuntion">send to model</button>
+        {{name}}{{tryTodo}}<br><button on-tap="sendFuntion">send to model</button><button on-tap="addTodo">add todo</button><hr>
     </template>
     <script>
         Polymer({
@@ -11,11 +11,18 @@
                 name:{
                     type:"String",
                     nylonState:"my-model.name"
+                },
+                tryTodo:{
+                    type:"Array",
+                    nylonState:"my-model.todoList"
                 }
             },
             behaviors:[nylon.behavior.state.connect],
             sendFuntion:function(){
                 this.nylonStateDispatch('my-model').testFunction('msg');
+            },
+            addTodo:function(){
+                this.nylonStateDispatch('my-model').addTodo('next');
             }
         });
     </script>
