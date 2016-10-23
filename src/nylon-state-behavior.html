@@ -1,12 +1,12 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <script>
 
-    if(typeof window.nylon == "undefined") window.nylon = {};
-    if(typeof nylon.behavior == "undefined") nylon.behavior = {};
-    if(typeof nylon.behavior.state == "undefined") nylon.behavior.state = {};
-    if(typeof nylon.behavior.state.model == "undefined") nylon.behavior.state.model = {};
+    window.nylon = window.nylon || {};
+    nylon.behavior = nylon.behavior || {};
+    nylon.behavior.state = nylon.behavior.state || {};
+    nylon.behavior.state.model = nylon.behavior.state.model || {};
 
-    nylon.behavior.state.register = {
+    nylon.behavior.state.register = { 
         nylonStateRegister:function(modelName){
             var modelName = modelName.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
             if(typeof nylon.behavior.state.model[modelName] == "undefined"){
@@ -59,6 +59,7 @@
             }
         },
         ready:function(){
+            this.state = {};
             if(typeof this.properties != "undefined"){
                 for(var key in this.properties){
                     if(this.properties[key].hasOwnProperty('nylonState')){
@@ -68,8 +69,13 @@
                             var modelName = props[0].replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
                             var map = {prop:key,node:this};
 
+                            if(!this.state.hasOwnProperty(modelName))
+                            this.state[modelName] = [];
+                            
                             if(typeof nylon.behavior.state.model[modelName] != "undefined"){
                                 this.nylonStateDispatch(modelName).mapStateToProps(props[1],map);
+                                this.state[modelName].push(props[1]);
+                                
                             }else{
                                 console.error('nylonState : Model not found.')
                             }
@@ -81,6 +87,18 @@
                 }
             }
 
+        },
+        detached:function(){
+            for(var model in this.state){
+                this.state[model].map(function(prop){
+                    nylon.behavior.state.model[model].state[prop].map(function(node,i){
+                        if(node.node == this){
+                            nylon.behavior.state.model[model].state[prop].splice(i,1);
+                        }
+                        
+                    }.bind(this));
+                }.bind(this));
+            }
         }
     };
 </script>

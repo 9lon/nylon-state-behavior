@@ -9,11 +9,21 @@
     <template>
         <my-model></my-model>
         <my-component></my-component>
-        <my-component></my-component>  
+        <div id="ref">
+            <my-component id="com"></my-component>
+            <button on-tap="del">del</button>
+        </div>
+        
+
     </template>
     <script>
         Polymer({
-            is:'my-app'
+            is:'my-app',
+            del:function(){
+                var ref = this.$.ref;
+                var com = this.$.com;
+                ref.removeChild(com);
+            }
         });
     </script>
 </dom-module>
